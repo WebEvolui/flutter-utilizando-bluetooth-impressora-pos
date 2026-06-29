@@ -3,6 +3,7 @@ import 'package:curso_impressora_pos/viewmodel/checkout_viewmodel.dart';
 import 'package:flutter/material.dart';
 import '../app_colors.dart';
 
+// ignore: must_be_immutable
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 

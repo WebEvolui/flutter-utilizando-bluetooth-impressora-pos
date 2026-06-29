@@ -1,7 +1,8 @@
+import 'dart:io';
+
 import 'package:curso_impressora_pos/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 import '../app_colors.dart';
 
 class PermissionScreen extends StatelessWidget {
@@ -65,13 +66,20 @@ class PermissionScreen extends StatelessWidget {
                 height: 52,
                 child: ElevatedButton(
                   onPressed: () async {
-                    await Permission.bluetoothScan.request();
-                    await Permission.bluetoothConnect.request();
-                    if ((await Permission.bluetoothScan.isGranted &&
-                            await Permission.bluetoothConnect.isGranted) ||
-                        await Permission.bluetooth.isGranted) {
+                    if (Platform.isAndroid || Platform.isIOS || Platform.isWindows) {
+                      await Permission.bluetoothScan.request();
+                      await Permission.bluetoothConnect.request();
+
+                      if ((await Permission.bluetoothScan.isGranted &&
+                          await Permission.bluetoothConnect.isGranted) ||
+                          await Permission.bluetooth.isGranted) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => HomeScreen()),
+                        );
+                      }
+                    } else if (Platform.isMacOS ) {
                       Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                        MaterialPageRoute(builder: (_) => HomeScreen()),
                       );
                     }
                   },

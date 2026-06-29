@@ -9,7 +9,7 @@ class CheckoutViewmodel {
   Future<void> printReceipt(List<Item> items, double total) async {
     List<BluetoothInfo> pairedDevices =
         await PairedDevicesService.getPairedDevices();
-    await PrinterConnectionService.connect(pairedDevices[1].macAdress);
+    await PrinterConnectionService.connect(pairedDevices[0].macAdress);
     await PrintingService.printReceipt(await _prepareReceipt(items, total));
   }
 
