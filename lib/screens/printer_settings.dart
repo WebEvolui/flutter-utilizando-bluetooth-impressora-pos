@@ -1,5 +1,6 @@
 import 'package:esc_pos_utils_plus/esc_pos_utils_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PrinterSettings extends StatelessWidget {
   PrinterSettings({super.key});
@@ -33,13 +34,13 @@ class PrinterSettings extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 40),
-                Text("Selecione as configurações básicas para a sua impressão:"),
+                Text(
+                  "Selecione as configurações básicas para a sua impressão:",
+                ),
                 SizedBox(height: 24),
                 DropdownMenu<PaperSize>(
                   controller: paperSizeController,
-                  onSelected: (value) => {
-                    paperSize = value!,
-                  },
+                  onSelected: (value) => {paperSize = value!},
                   inputDecorationTheme: InputDecorationTheme(
                     contentPadding: const EdgeInsets.all(16),
                     border: OutlineInputBorder(
@@ -58,9 +59,7 @@ class PrinterSettings extends StatelessWidget {
                 SizedBox(height: 24),
                 DropdownMenu<PosTextSize>(
                   controller: fontSizeController,
-                  onSelected: (value) => {
-                    fontSize = value!,
-                  },
+                  onSelected: (value) => {fontSize = value!},
                   inputDecorationTheme: InputDecorationTheme(
                     contentPadding: const EdgeInsets.all(16),
                     border: OutlineInputBorder(
@@ -87,7 +86,20 @@ class PrinterSettings extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          final SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          prefs.setInt('paperSize', paperSize.value);
+                          prefs.setInt('fontSize', fontSize.value);
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                'Configurações salvas com sucesso!',
+                              ),
+                            ),
+                          );
+                        },
                         child: Text("Salvar configuração"),
                       ),
                       SizedBox(height: 16),
