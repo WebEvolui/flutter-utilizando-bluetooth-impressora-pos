@@ -2,6 +2,7 @@ import 'package:curso_impressora_pos/models/items.dart';
 import 'package:curso_impressora_pos/screens/paired_devices_screen.dart';
 import 'package:curso_impressora_pos/viewmodel/checkout_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 import '../app_colors.dart';
 
 // ignore: must_be_immutable
@@ -48,7 +49,56 @@ class HomeScreen extends StatelessWidget {
                       0.0,
                       (sum, item) => sum + item.price,
                     );
-                    checkoutViewmodel.printReceipt(items, total);
+                    if (await PrintBluetoothThermal.bluetoothEnabled) {
+                      if (await PrintBluetoothThermal.connectionStatus) {
+                        checkoutViewmodel.printReceipt(items, total);
+                      } else {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text('Nenhum dispositivo conectado'),
+                            content: Text(
+                              'Por favor, conecte um dispositivo antes de imprimir.',
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(),
+                                child: Text('Ok'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    } else {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 32),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Icon(
+                                  Icons.bluetooth_disabled,
+                                  size: 48,
+                                  color: AppColors.primary,
+                                ),
+                                SizedBox(height: 24),
+                                Text(
+                                  'Ativar Bluetooth',
+                                  style: TextStyle(fontSize: 24),
+                                ),
+                                SizedBox(height: 24),
+                                Text(
+                                  'Para continuar a impressão, a aplicação precisa do bluetooth ativo.',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    }
                   },
                   style: ButtonStyle(
                     backgroundColor: WidgetStatePropertyAll(AppColors.primary),
@@ -59,7 +109,7 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  child: Text('Continuar', style: TextStyle(fontSize: 16)),
+                  child: Text('Imprimir', style: TextStyle(fontSize: 16)),
                 ),
               ),
             ),

@@ -52,8 +52,13 @@ class PairedDevicesScreen extends StatelessWidget {
                       return SliverList.builder(
                         itemBuilder: (context, index) => ListTile(
                           onTap: () async {
-                            await PrinterConnectionService.connect(
-                                snapshot.data![index].macAdress);
+                            try {
+                              await PrinterConnectionService.connect(
+                                  snapshot.data![index].macAdress);
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('impressora conectada')));
+                            } catch (e) {
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Não foi possivel se conectar')));
+                            }
                           },
                           title: Text(snapshot.data![index].name),
                           subtitle: Text(snapshot.data![index].macAdress),

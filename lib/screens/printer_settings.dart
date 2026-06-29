@@ -2,6 +2,8 @@ import 'package:esc_pos_utils_plus/esc_pos_utils_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../services/printing_service.dart';
+
 class PrinterSettings extends StatelessWidget {
   PrinterSettings({super.key});
 
@@ -104,7 +106,9 @@ class PrinterSettings extends StatelessWidget {
                       ),
                       SizedBox(height: 16),
                       OutlinedButton(
-                        onPressed: () async {},
+                        onPressed: () async {
+                          await PrintingService.printTest();
+                        },
                         child: Text("Imprimir teste"),
                       ),
                     ],
