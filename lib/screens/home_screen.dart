@@ -1,4 +1,5 @@
 import 'package:curso_impressora_pos/models/items.dart';
+import 'package:curso_impressora_pos/screens/paired_devices_screen.dart';
 import 'package:curso_impressora_pos/viewmodel/checkout_viewmodel.dart';
 import 'package:flutter/material.dart';
 import '../app_colors.dart';
@@ -21,6 +22,16 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Aplicativo Delivery'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.print, color: Colors.black87),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const PairedDevicesScreen()),
+              );
+            },
+          ),
+        ],
       ),
       body: SafeArea(
         child: Column(
