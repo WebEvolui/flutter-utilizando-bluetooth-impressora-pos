@@ -73,6 +73,11 @@ class PermissionScreen extends StatelessWidget {
                       if ((await Permission.bluetoothScan.isGranted &&
                           await Permission.bluetoothConnect.isGranted) ||
                           await Permission.bluetooth.isGranted) {
+
+                        if(!context.mounted) {
+                          return;
+                        }
+                        
                         Navigator.of(context).push(
                           MaterialPageRoute(builder: (_) => HomeScreen()),
                         );

@@ -1,5 +1,6 @@
 import 'package:curso_impressora_pos/utils/printer_settings_utils.dart';
 import 'package:esc_pos_utils_plus/esc_pos_utils_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -8,7 +9,9 @@ class PrintingService {
     try {
       await PrintBluetoothThermal.writeBytes(bytes);
     } catch (e) {
-      print("Error printing receipt: $e");
+      if (kDebugMode) {
+        print("Error printing receipt: $e");
+      }
     }
   }
 

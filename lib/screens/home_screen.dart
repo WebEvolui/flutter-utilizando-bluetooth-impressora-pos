@@ -53,6 +53,10 @@ class HomeScreen extends StatelessWidget {
                       if (await PrintBluetoothThermal.connectionStatus) {
                         checkoutViewmodel.printReceipt(items, total);
                       } else {
+                        if(!context.mounted) {
+                          return;
+                        }
+
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
@@ -70,6 +74,10 @@ class HomeScreen extends StatelessWidget {
                         );
                       }
                     } else {
+                      if(!context.mounted) {
+                        return;
+                      }
+
                       showModalBottomSheet(
                         context: context,
                         builder: (context) {

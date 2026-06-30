@@ -27,9 +27,9 @@ class PairedDevicesScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.settings, color: Colors.black87),
             onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => PrinterSettings()),
-              );
+              Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (_) => PrinterSettings()));
             },
           ),
         ],
@@ -42,36 +42,46 @@ class PairedDevicesScreen extends StatelessWidget {
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 24),
-                  child: Text("Bluetooth", style: TextStyle(fontSize: 22),),
+                  child: Text("Bluetooth", style: TextStyle(fontSize: 22)),
                 ),
               ),
               FutureBuilder(
-                  future: PairedDevicesService.getPairedDevices(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return SliverList.builder(
-                        itemBuilder: (context, index) => ListTile(
-                          onTap: () async {
-                            try {
-                              await PrinterConnectionService.connect(
-                                  snapshot.data![index].macAdress);
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('impressora conectada')));
-                            } catch (e) {
-                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Não foi possivel se conectar')));
+                future: PairedDevicesService.getPairedDevices(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return SliverList.builder(
+                      itemBuilder: (context, index) => ListTile(
+                        onTap: () async {
+                          try {
+                            await PrinterConnectionService.connect(
+                              snapshot.data![index].macAdress,
+                            );
+
+                            if (!context.mounted) {
+                              return;
                             }
-                          },
-                          title: Text(snapshot.data![index].name),
-                          subtitle: Text(snapshot.data![index].macAdress),
-                          leading: Icon(Icons.print),
-                        ),
-                        itemCount: snapshot.data!.length,
-                      );
-                    } else {
-                      return SliverToBoxAdapter(
-                        child: Container(),
-                      );
-                    }
-                  })
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('impressora conectada')),
+                            );
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Não foi possivel se conectar'),
+                              ),
+                            );
+                          }
+                        },
+                        title: Text(snapshot.data![index].name),
+                        subtitle: Text(snapshot.data![index].macAdress),
+                        leading: Icon(Icons.print),
+                      ),
+                      itemCount: snapshot.data!.length,
+                    );
+                  } else {
+                    return SliverToBoxAdapter(child: Container());
+                  }
+                },
+              ),
             ],
           ),
         ),

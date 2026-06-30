@@ -2,8 +2,10 @@ import 'package:esc_pos_utils_plus/esc_pos_utils_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../app_colors.dart';
 import '../services/printing_service.dart';
 
+// ignore: must_be_immutable
 class PrinterSettings extends StatelessWidget {
   PrinterSettings({super.key});
 
@@ -87,29 +89,61 @@ class PrinterSettings extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      ElevatedButton(
-                        onPressed: () async {
-                          final SharedPreferences prefs =
-                              await SharedPreferences.getInstance();
-                          prefs.setInt('paperSize', paperSize.value);
-                          prefs.setInt('fontSize', fontSize.value);
+                      SizedBox(
+                        width: double.infinity,
+                        height: 48,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            final SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            prefs.setInt('paperSize', paperSize.value);
+                            prefs.setInt('fontSize', fontSize.value);
 
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'Configurações salvas com sucesso!',
+                            if (!context.mounted) {
+                              return;
+                            }
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Configurações salvas com sucesso!',
+                                ),
+                              ),
+                            );
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: WidgetStatePropertyAll(AppColors.primary),
+                            foregroundColor: WidgetStatePropertyAll(AppColors.white),
+                            shape: WidgetStatePropertyAll(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(8)),
                               ),
                             ),
-                          );
-                        },
-                        child: Text("Salvar configuração"),
+                          ),
+                          child: Text("Salvar configuração"),
+                        ),
                       ),
                       SizedBox(height: 16),
-                      OutlinedButton(
-                        onPressed: () async {
-                          await PrintingService.printTest();
-                        },
-                        child: Text("Imprimir teste"),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 48,
+                        child: OutlinedButton(
+                          onPressed: () async {
+                            await PrintingService.printTest();
+                          },
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: AppColors.textPrimary,
+                            side: const BorderSide(
+                              color: AppColors.primary,
+                              width: 1.5,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            backgroundColor: AppColors.white,
+                          ),
+                          child: Text("Imprimir teste"),
+                        ),
                       ),
                     ],
                   ),

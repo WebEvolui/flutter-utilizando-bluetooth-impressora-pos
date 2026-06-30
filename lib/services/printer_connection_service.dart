@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 
 class PrinterConnectionService {
@@ -5,7 +6,9 @@ class PrinterConnectionService {
     try {
       await PrintBluetoothThermal.connect(macPrinterAddress: macAddress);
     } catch (e) {
-      print("Error connecting to printer: $e");
+      if (kDebugMode) {
+        print("Error connecting to printer: $e");
+      }
     }
   }
 
@@ -13,7 +16,9 @@ class PrinterConnectionService {
     try {
       await PrintBluetoothThermal.disconnect;
     } catch (e) {
-      print("Error disconnecting from printer: $e");
+      if (kDebugMode) {
+        print("Error disconnecting from printer: $e");
+      }
     }
   }
 }

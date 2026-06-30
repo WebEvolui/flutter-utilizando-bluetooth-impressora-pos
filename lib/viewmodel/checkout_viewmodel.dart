@@ -1,10 +1,7 @@
 import 'package:curso_impressora_pos/models/items.dart';
-import 'package:curso_impressora_pos/services/paired_devices_service.dart';
-import 'package:curso_impressora_pos/services/printer_connection_service.dart';
 import 'package:curso_impressora_pos/services/printing_service.dart';
 import 'package:curso_impressora_pos/utils/printer_settings_utils.dart';
 import 'package:esc_pos_utils_plus/esc_pos_utils_plus.dart';
-import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CheckoutViewmodel {

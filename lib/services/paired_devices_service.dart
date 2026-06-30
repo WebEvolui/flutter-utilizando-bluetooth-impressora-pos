@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:print_bluetooth_thermal/print_bluetooth_thermal.dart';
 
 class PairedDevicesService {
@@ -6,7 +7,9 @@ class PairedDevicesService {
     try {
       devices = await PrintBluetoothThermal.pairedBluetooths;
     } catch (e) {
-      print("Error retrieving paired devices: $e");
+      if (kDebugMode) {
+        print("Error retrieving paired devices: $e");
+      }
     }
     return devices;
   }
